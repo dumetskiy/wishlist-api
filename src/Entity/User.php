@@ -63,7 +63,7 @@ class User implements UserInterface
     private $apiKey;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, unique=true)
      *
      * @Assert\NotNull()
      * @Assert\Length(
