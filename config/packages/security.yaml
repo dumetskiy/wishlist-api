@@ -1,12 +1,16 @@
 security:
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+            id: App\Security\UserProvider
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
         main:
             anonymous: true
             lazy: true
-            provider: users_in_memory
+            logout: ~
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - App\Security\ApiKeyAuthenticator
     access_control:
+        - { path: ^/api[ / ]?$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: ROLE_USER }

@@ -1,7 +1,14 @@
 api_platform:
+    title: 'Wishlist API'
+    description: 'A CRUD API allowing users to add products to their whishlist'
+    version: 0.1.0
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
         json: ['application/merge-patch+json']
     swagger:
         versions: [3]
+        api_keys:
+            header_key_auth:
+                name: '%api_key_query_param_name%'
+                type: 'header'

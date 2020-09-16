@@ -5,14 +5,28 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Enum\ContextGroup;
 use App\Enum\UserRole;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get"={
+ *             "normalization_context"={"groups"={ContextGroup::USER_READ}},
+ *         },
+ *     },
+ *     itemOperations={
+ *         "get"={
+ *             "normalization_context"={"groups"={ContextGroup::USER_READ}},
+ *         },
+ *     },
+ * )
+ *
  * @ORM\Entity()
  *
  * @UniqueEntity("username")
@@ -20,15 +34,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
     /**
+     * @var integer
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({ContextGroup::USER_READ})
      */
     private $id;
 
     /**
      * This is an API key used to authenticate the user
-     * By default fixture-generated users API keys are generated using uuid_create()
+     * By default fixture-generated users API keys are generated using uuid_create().
+     * The serialization context is not set so this field will not be serialized
      *
      * @var string
      *
@@ -52,8 +71,18 @@ class User implements UserInterface
      *      maxMessage = "Username is limited to {{ limit }} characters",
      *      allowEmptyString = false
      * )
+     *
+     * @Groups({ContextGroup::USER_READ})
      */
     private $username;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * @return string
