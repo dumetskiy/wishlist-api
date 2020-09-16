@@ -21,6 +21,16 @@ kill:
 	@echo Project has been killed.
 
 composer:
-	@echo Performing composer install...
-	${CMD_DOCKER_COMPOSE}  exec php composer install
-	@echo Composer install completed.
+	@echo Performing composer command...
+	${CMD_DOCKER_COMPOSE} exec php composer $(command)
+	@echo Composer command completed.
+
+console:
+	@echo Executing symfony console command...
+	${CMD_DOCKER_COMPOSE} exec php bin/console $(command)
+	@echo Symfony console command executed.
+
+exec:
+	@echo Executing command...
+	${CMD_DOCKER_COMPOSE} exec $(command)
+	@echo Command executed.
