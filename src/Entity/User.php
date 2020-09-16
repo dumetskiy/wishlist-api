@@ -7,12 +7,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Enum\UserRole;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity()
+ *
+ * @UniqueEntity("username")
  */
 class User implements UserInterface
 {
@@ -41,6 +44,18 @@ class User implements UserInterface
     private $apiKey;
 
     /**
+     * @ORM\Column(type="string", length=20)
+     *
+     * @Assert\NotNull()
+     * @Assert\Length(
+     *      max = 20,
+     *      maxMessage = "Username is limited to {{ limit }} characters",
+     *      allowEmptyString = false
+     * )
+     */
+    private $username;
+
+    /**
      * @return string
      */
     public function getApiKey(): string
@@ -61,11 +76,23 @@ class User implements UserInterface
     }
 
     /**
+     * @param mixed $username
+     *
+     * @return $this
+     */
+    public function setUsername($username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
      * @see UserInterface
      */
     public function getUsername(): string
     {
-        return $this->apiKey;
+        return $this->username;
     }
 
     /**

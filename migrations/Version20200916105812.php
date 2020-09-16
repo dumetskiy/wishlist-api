@@ -7,14 +7,14 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20200916102525 extends AbstractMigration
+final class Version20200916105812 extends AbstractMigration
 {
     /**
      * @return string
      */
     public function getDescription(): string
     {
-        return 'Creates user entity';
+        return 'Create User table';
     }
 
     /**
@@ -26,17 +26,19 @@ final class Version20200916102525 extends AbstractMigration
             CREATE TABLE user (
                 id INT AUTO_INCREMENT NOT NULL, 
                 api_key VARCHAR(50) NOT NULL, 
-                PRIMARY KEY(id)
+                username VARCHAR(20) NOT NULL, 
+                PRIMARY KEY(id),
+                UNIQUE (username)
             ) 
-            DEFAULT CHARACTER SET utf8mb4 
-            COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` 
+            ENGINE = InnoDB
         ');
     }
 
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE user');
     }
