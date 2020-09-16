@@ -1,0 +1,30 @@
+version: '2'
+services:
+  php:
+    build: ./docker/php-fpm
+    volumes:
+      - .:/data/app/
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - mysql
+  web:
+    image: nginx:latest
+    ports:
+      - "8888:80"
+    volumes:
+      - .:/data/app/
+      - ./docker/nginx/wishlist-api.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    env_file:
+      - .env.local
+  mysql:
+    image: mysql:5.6
+    command:
+      --sql_mode=""
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+volumes:
+  mysql:
