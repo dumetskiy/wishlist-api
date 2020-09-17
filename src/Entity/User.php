@@ -7,6 +7,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Enum\ContextGroup;
 use App\Enum\UserRole;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,8 +29,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @ORM\Entity()
+ * @ORM\Table(name="tblUser")
  *
- * @UniqueEntity("username")
+ * @UniqueEntity("strUsername")
  */
 class User implements UserInterface
 {
@@ -38,7 +40,7 @@ class User implements UserInterface
      *
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="intUserId", type="integer")
      *
      * @Groups({ContextGroup::USER_READ})
      */
@@ -51,7 +53,7 @@ class User implements UserInterface
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(name="strApiKey", type="string", length=50)
      *
      * @Assert\NotNull()
      * @Assert\Length(
@@ -63,7 +65,7 @@ class User implements UserInterface
     private $apiKey;
 
     /**
-     * @ORM\Column(type="string", length=20, unique=true)
+     * @ORM\Column(name="strUsername", type="string", length=20, unique=true)
      *
      * @Assert\NotNull()
      * @Assert\Length(
@@ -75,6 +77,15 @@ class User implements UserInterface
      * @Groups({ContextGroup::USER_READ})
      */
     private $username;
+
+    /**
+     * @var ArrayCollection|Wishlist[]
+     *
+     * @ORM\OneToMany(targetEntity=Wishlist::class, mappedBy="user")
+     *
+     * @Groups({ContextGroup::USER_READ})
+     */
+    private $wishlists;
 
     /**
      * @return int
@@ -122,6 +133,22 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * @return Wishlist[]|ArrayCollection
+     */
+    public function getWishlists()
+    {
+        return $this->wishlists;
+    }
+
+    /**
+     * @param Wishlist[]|ArrayCollection $wishlists
+     */
+    public function setWishlists($wishlists): void
+    {
+        $this->wishlists = $wishlists;
     }
 
     /**

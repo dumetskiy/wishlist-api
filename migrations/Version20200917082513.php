@@ -7,14 +7,14 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20200916184934 extends AbstractMigration
+final class Version20200917082513 extends AbstractMigration
 {
     /**
      * @return string
      */
     public function getDescription(): string
     {
-        return 'Create product table';
+        return 'Create User table';
     }
 
     /**
@@ -22,12 +22,14 @@ final class Version20200916184934 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
+        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('
-            CREATE TABLE product (
-                id INT AUTO_INCREMENT NOT NULL, 
-                name VARCHAR(50) NOT NULL, 
-                UNIQUE INDEX idex_product_name (name), 
-                PRIMARY KEY(id)
+            CREATE TABLE tblUser (
+                intUserId INT AUTO_INCREMENT NOT NULL, 
+                strApiKey VARCHAR(50) NOT NULL, 
+                strUsername VARCHAR(20) NOT NULL, 
+                UNIQUE INDEX IDX_tblUser_strUsername (strUsername), 
+                PRIMARY KEY(intUserId)
             ) 
             DEFAULT CHARACTER SET utf8mb4 
             COLLATE `utf8mb4_unicode_ci` 
@@ -40,6 +42,6 @@ final class Version20200916184934 extends AbstractMigration
      */
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE product');
+        $this->addSql('DROP TABLE tblUser');
     }
 }

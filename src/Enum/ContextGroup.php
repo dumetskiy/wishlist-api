@@ -7,4 +7,5 @@ namespace App\Enum;
 final class ContextGroup
 {
     public const USER_READ = 'user:read';
+    public const USER_WISHLIST_MODIFY = 'user:modify-wishlist';
 }
