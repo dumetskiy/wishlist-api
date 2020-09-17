@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="tblProduct")
  *
- * @UniqueEntity("strName")
+ * @UniqueEntity("name")
  */
 class Product
 {
@@ -26,7 +26,7 @@ class Product
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intProductId", type="integer")
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_READ})
      */
     private $id;
 
@@ -39,7 +39,7 @@ class Product
      *      maxMessage = "Product name cannot be longer than {{ limit }} characters"
      * )
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_READ})
      */
     private $name;
 

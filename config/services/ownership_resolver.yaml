@@ -1,0 +1,12 @@
+services:
+    app.ownership_resolver.user:
+        class: App\Security\OwnershipResolver\UserOwnershipResolver
+        tags: ['app.ownership_resolver']
+
+    app.ownership_resolver.wishlist:
+        class: App\Security\OwnershipResolver\WishlistOwnershipResolver
+        tags: ['app.ownership_resolver']
+
+    app.ownership_resolver.product:
+        class: App\Security\OwnershipResolver\ProductOwnershipResolver
+        tags: ['app.ownership_resolver']

@@ -1,3 +1,8 @@
+imports:
+    - { resource: services/ownership_resolver.yaml }
+    - { resource: services/kernel_event_handler.yaml }
+    - { resource: services/serializer.yaml }
+
 parameters:
     api_key_query_param_name: key
 
@@ -17,3 +22,6 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
+
+    App\Serializer\AccessControlNormalizer:
+        arguments: ['@api_platform.jsonld.normalizer.item']

@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    app.kernel_event_handler.request:
+        class: App\KernelEvent\EventHandler\RequestEventHandler
+        tags: ['app.kernel_event_handler']

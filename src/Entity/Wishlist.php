@@ -6,8 +6,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Enum\ContextGroup;
-use App\Enum\ValidationGroup;
-use App\Validator\Constraints\CurrentUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -16,18 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     collectionOperations={
- *         "get"={
- *             "validation_groups"={ValidationGroup::CHECK_USER_MATCH},
- *         },
- *     },
- *     itemOperations={
- *         "get",
- *         "patch",
- *         "put"={
- *             "validation_groups"={ValidationGroup::CHECK_USER_MATCH},
- *         },
- *     },
+ *     denormalizationContext={ContextGroup::GUEST_WRITE},
+ *     normalizationContext={ContextGroup::GUEST_READ},
  * )
  *
  * @ORM\Entity()
@@ -40,7 +28,7 @@ class Wishlist
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intWishlistId", type="integer")
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_WRITE, ContextGroup::GUEST_READ})
      */
     private $id;
 
@@ -53,17 +41,17 @@ class Wishlist
      *      maxMessage = "Wishlist name cannot be longer than {{ limit }} characters"
      * )
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::OWNER_WRITE, ContextGroup::GUEST_READ})
      */
     private $name;
 
     /**
+     * IsValidOwner constraint allows to make sure only the owner of the wishlist can modify it
+     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity=User::class, cascade={"all"})
      * @ORM\JoinColumn(name="intUserId", referencedColumnName="intUserId", onDelete="SET NULL")
-     *
-     * @CurrentUser(groups={ValidationGroup::CHECK_USER_MATCH})
      */
     private $user;
 
@@ -79,7 +67,7 @@ class Wishlist
      *
      * @Assert\NotNull()
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_READ})
      */
     private $products;
 

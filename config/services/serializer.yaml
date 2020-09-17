@@ -1,0 +1,3 @@
+services:
+    App\Serializer\AccessControlNormalizer:
+        arguments: ['@api_platform.jsonld.normalizer.item']

@@ -16,14 +16,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ *     normalizationContext={"groups"={ContextGroup::GUEST_READ}},
+ *     denormalizationContext={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
  *     collectionOperations={
- *         "get"={
- *             "normalization_context"={"groups"={ContextGroup::USER_READ}},
+ *         "post"={
+ *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
+ *              "normalization_context"={"groups"={ContextGroup::GUEST_READ, ContextGroup::OWNER_READ}},
  *         },
  *     },
  *     itemOperations={
- *         "get"={
- *             "normalization_context"={"groups"={ContextGroup::USER_READ}},
+ *         "get",
+ *         "patch"={
+ *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE}},
+ *              "normalization_context"={"groups"={ContextGroup::GUEST_READ}},
  *         },
  *     },
  * )
@@ -31,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="tblUser")
  *
- * @UniqueEntity("strUsername")
+ * @UniqueEntity("username")
  */
 class User implements UserInterface
 {
@@ -42,7 +47,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intUserId", type="integer")
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_READ, ContextGroup::GUEST_WRITE})
      */
     private $id;
 
@@ -61,11 +66,13 @@ class User implements UserInterface
      *      maxMessage = "API key size is limited to {{ limit }} characters",
      *      allowEmptyString = false
      * )
+     *
+     * @Groups({ContextGroup::OWNER_READ, ContextGroup::OWNER_WRITE})
      */
     private $apiKey;
 
     /**
-     * @ORM\Column(name="strUsername", type="string", length=20, unique=true)
+     * @ORM\Column(name="strUsername", type="string", length=20)
      *
      * @Assert\NotNull()
      * @Assert\Length(
@@ -74,7 +81,7 @@ class User implements UserInterface
      *      allowEmptyString = false
      * )
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_READ, ContextGroup::OWNER_WRITE})
      */
     private $username;
 
@@ -83,14 +90,14 @@ class User implements UserInterface
      *
      * @ORM\OneToMany(targetEntity=Wishlist::class, mappedBy="user")
      *
-     * @Groups({ContextGroup::USER_READ})
+     * @Groups({ContextGroup::GUEST_READ})
      */
     private $wishlists;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
