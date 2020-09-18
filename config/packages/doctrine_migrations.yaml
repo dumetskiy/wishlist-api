@@ -1,3 +1,5 @@
 doctrine_migrations:
     migrations_paths:
         'DoctrineMigrations': '%kernel.project_dir%/migrations'
+    # Wrap all migrations into transactions
+    all_or_nothing: false

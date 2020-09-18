@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security\OwnershipResolver;
 
-use App\Entity\User;
-use App\Entity\Wishlist;
+use App\Entity\Product;
 
 class ProductOwnershipResolver extends BaseOwnershipResolver
 {
@@ -22,6 +21,6 @@ class ProductOwnershipResolver extends BaseOwnershipResolver
      */
     public function getSupportedEntityType(): string
     {
-        return Wishlist::class;
+        return Product::class;
     }
 }

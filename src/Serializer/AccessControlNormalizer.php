@@ -42,7 +42,10 @@ final class AccessControlNormalizer implements NormalizerInterface, Denormalizer
      */
     public function normalize($object, string $format = null, array $context = [])
     {
-        if ($this->ownershipValidator->isObjectOwnedByCurrentUser($object)) {
+        if (
+            !in_array(ContextGroup::OWNER_READ, $context)
+            && $this->ownershipValidator->isObjectOwnedByCurrentUser($object)
+        ) {
             $context['groups'][] = ContextGroup::OWNER_READ;
         }
 
@@ -91,5 +94,10 @@ final class AccessControlNormalizer implements NormalizerInterface, Denormalizer
     public function supportsDenormalization($data, string $type, string $format = null): bool
     {
         return $this->normalizer->supportsDenormalization($data, $type, $format);
+    }
+
+    private function addContextGroup(array &$context): void
+    {
+
     }
 }

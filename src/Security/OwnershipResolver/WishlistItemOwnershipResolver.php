@@ -6,17 +6,20 @@ namespace App\Security\OwnershipResolver;
 
 use App\Entity\User;
 use App\Entity\Wishlist;
+use App\Entity\WishlistItem;
 
-class WishlistOwnershipResolver extends BaseOwnershipResolver
+class WishlistItemOwnershipResolver extends BaseOwnershipResolver
 {
     /**
-     * @param Wishlist $object
+     * @param WishlistItem $object
      *
      * @return User|null
      */
     public function getOwner($object): ?User
     {
-        return $object->getUser();
+        return $object->getWishlist() instanceof Wishlist
+            ? $object->getWishlist()->getUser()
+            : null;
     }
 
     /**
@@ -24,6 +27,6 @@ class WishlistOwnershipResolver extends BaseOwnershipResolver
      */
     public function getSupportedEntityType(): string
     {
-        return Wishlist::class;
+        return WishlistItem::class;
     }
 }

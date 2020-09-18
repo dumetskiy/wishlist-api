@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Entity\User;
 use App\Security\OwnershipResolver\OwnershipResolverFactory;
 use Symfony\Component\Security\Core\Security;
 
@@ -44,6 +45,8 @@ class OwnershipValidator
             return false;
         }
 
-        return $ownershipResolver->getOwner($object)->getId() === $this->security->getUser()->getId();
+        $objectOwner = $ownershipResolver->getOwner($object);
+
+        return $objectOwner instanceof User && $objectOwner->getId() === $this->security->getUser()->getId();
     }
 }

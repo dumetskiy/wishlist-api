@@ -12,7 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"post", "get"},
+ *     itemOperations={"get"},
+ * )
  *
  * @ORM\Entity()
  * @ORM\Table(name="tblProduct")

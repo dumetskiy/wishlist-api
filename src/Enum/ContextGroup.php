@@ -6,8 +6,6 @@ namespace App\Enum;
 
 final class ContextGroup
 {
-    public const USER_READ = 'user:read';
-
     public const GUEST_WRITE = 'guest:write';
     public const GUEST_READ = 'guest:read';
 

@@ -26,7 +26,7 @@ final class Version20200917082804 extends AbstractMigration
             CREATE TABLE tblProduct (
                 intProductId INT AUTO_INCREMENT NOT NULL, 
                 strName VARCHAR(50) NOT NULL, 
-                UNIQUE INDEX IDX_tblProduct_strName (strName), 
+                UNIQUE INDEX UNIQ_tblProduct_strName (strName), 
                 PRIMARY KEY(intProductId)
             ) 
             DEFAULT CHARACTER SET utf8mb4 
@@ -34,8 +34,8 @@ final class Version20200917082804 extends AbstractMigration
             ENGINE = InnoDB
         ');
 
-        $this->addSql('DROP INDEX idx_tbluser_strusername ON tblUser');
-        $this->addSql('CREATE UNIQUE INDEX idx_tbluser_strusername ON tblUser (strUsername)');
+        $this->addSql('DROP INDEX IDX_tblUser_strUsername ON tblUser');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_tblUser_strUsername ON tblUser (strUsername)');
     }
 
     /**
@@ -44,7 +44,7 @@ final class Version20200917082804 extends AbstractMigration
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE tblProduct');
-        $this->addSql('DROP INDEX uniq_9050b93049baf0e7 ON tblUser');
+        $this->addSql('DROP INDEX UNIQ_tblUser_strUsername ON tblUser');
         $this->addSql('CREATE UNIQUE INDEX IDX_tblUser_strUsername ON tblUser (strUsername)');
     }
 }

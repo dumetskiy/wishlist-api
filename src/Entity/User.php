@@ -25,8 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *     },
  *     itemOperations={
- *         "get",
- *         "patch"={
+ *         "get"={
  *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE}},
  *              "normalization_context"={"groups"={ContextGroup::GUEST_READ}},
  *         },

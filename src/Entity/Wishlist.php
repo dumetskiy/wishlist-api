@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Enum\ContextGroup;
+use App\Validator\Constraints\IsResourceOwner;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -14,8 +15,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     denormalizationContext={ContextGroup::GUEST_WRITE},
- *     normalizationContext={ContextGroup::GUEST_READ},
+ *     normalizationContext={"groups"={ContextGroup::GUEST_READ}},
+ *     denormalizationContext={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
+ *     collectionOperations={
+ *         "post"={
+ *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
+ *              "normalization_context"={"groups"={ContextGroup::GUEST_READ, ContextGroup::OWNER_READ}},
+ *         },
+ *     },
+ *     itemOperations={
+ *         "get"={
+ *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE}},
+ *              "normalization_context"={"groups"={ContextGroup::GUEST_READ}},
+ *         },
+ *     },
  * )
  *
  * @ORM\Entity()
@@ -41,40 +54,30 @@ class Wishlist
      *      maxMessage = "Wishlist name cannot be longer than {{ limit }} characters"
      * )
      *
-     * @Groups({ContextGroup::OWNER_WRITE, ContextGroup::GUEST_READ})
+     * @Groups({ContextGroup::GUEST_WRITE, ContextGroup::GUEST_READ})
      */
     private $name;
 
     /**
-     * IsValidOwner constraint allows to make sure only the owner of the wishlist can modify it
-     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity=User::class, cascade={"all"})
      * @ORM\JoinColumn(name="intUserId", referencedColumnName="intUserId", onDelete="SET NULL")
+     *
+     * @Groups({ContextGroup::GUEST_WRITE})
+     *
+     * @IsResourceOwner()
      */
     private $user;
 
     /**
-     * @var PersistentCollection|Product[]
+     * @var ArrayCollection|WishlistItem[]
      *
-     * @ORM\ManyToMany(targetEntity=Product::class, cascade={"all"})
-     *
-     * @ORM\JoinTable(name="tblWishlistProduct",
-     *     joinColumns={@ORM\JoinColumn(name="intWishlistId", referencedColumnName="intWishlistId", onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="intProductId", referencedColumnName="intProductId", onDelete="SET NULL")}
-     * )
-     *
-     * @Assert\NotNull()
+     * @ORM\OneToMany(targetEntity=WishlistItem::class, mappedBy="wishlist")
      *
      * @Groups({ContextGroup::GUEST_READ})
      */
-    private $products;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
+    private $wishlistItems;
 
     /**
      * @return int|null
@@ -105,9 +108,9 @@ class Wishlist
     }
 
     /**
-     * @return User
+     * @return User|null
      */
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -125,21 +128,21 @@ class Wishlist
     }
 
     /**
-     * @return PersistentCollection
+     * @return WishlistItem[]|PersistentCollection
      */
-    public function getProducts(): PersistentCollection
+    public function getWishlistItems()
     {
-        return $this->products;
+        return $this->wishlistItems;
     }
 
     /**
-     * @param array $products
+     * @param WishlistItem[]|ArrayCollection $wishlistItems
      *
      * @return $this
      */
-    public function setProducts(array $products): self
+    public function setWishlistItems($wishlistItems): self
     {
-        $this->products = $products;
+        $this->wishlistItems = $wishlistItems;
 
         return $this;
     }
