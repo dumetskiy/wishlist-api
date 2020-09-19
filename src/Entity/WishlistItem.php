@@ -13,20 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={ContextGroup::GUEST_READ, ContextGroup::OWNER_READ}},
- *     denormalizationContext={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
- *     collectionOperations={
- *         "post"={
- *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
- *              "normalization_context"={"groups"={ContextGroup::GUEST_READ, ContextGroup::OWNER_READ}},
- *         },
- *     },
- *     itemOperations={
- *         "get"={
- *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE}},
- *              "normalization_context"={"groups"={ContextGroup::GUEST_READ}},
- *         },
- *     },
+ *     normalizationContext={"groups"={ContextGroup::SCOPE_WISHLIST_ITEM_READ}},
+ *     denormalizationContext={"groups"={ContextGroup::SCOPE_WISHLIST_ITEM_WRITE}},
+ *     collectionOperations={"post"},
+ *     itemOperations={"get", "delete"},
  * )
  *
  * @ORM\Entity()
@@ -39,26 +29,38 @@ class WishlistItem
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intWishlistItemId", type="integer")
      *
-     * @Groups({ContextGroup::GUEST_WRITE, ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_WRITE,
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_READ,
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     * })
      */
     private $id;
 
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity=Product::class, cascade={"all"})
+     * @ORM\ManyToOne(targetEntity=Product::class, cascade={"persist"})
      * @ORM\JoinColumn(name="intProductId", referencedColumnName="intProductId", onDelete="SET NULL")
      *
-     * @Groups({ContextGroup::OWNER_WRITE, ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_WRITE,
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_READ,
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     * })
      */
     private $product;
 
     /**
      * @var Wishlist
-     * @ORM\ManyToOne(targetEntity=Wishlist::class, cascade={"all"})
+     *
+     * @ORM\ManyToOne(targetEntity=Wishlist::class, cascade={"persist"})
      * @ORM\JoinColumn(name="intWishlistId", referencedColumnName="intWishlistId", onDelete="SET NULL")
      *
-     * @Groups({ContextGroup::OWNER_WRITE, ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_WRITE,
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_READ,
+     * })
      *
      * @IsResourceOwner()
      */
@@ -71,7 +73,10 @@ class WishlistItem
      *
      * @Assert\NotNull()
      *
-     * @Groups({ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_READ,
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     * })
      */
     private $created;
 
@@ -109,14 +114,6 @@ class WishlistItem
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreated(): \DateTime
-    {
-        return $this->created;
-    }
-
-    /**
      * @param \DateTime $created
      *
      * @return $this
@@ -126,6 +123,14 @@ class WishlistItem
         $this->created = $created;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
     }
 
     /**

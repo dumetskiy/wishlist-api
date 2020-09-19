@@ -28,6 +28,7 @@ final class Version20200917082513 extends AbstractMigration
                 strApiKey VARCHAR(50) NOT NULL, 
                 strUsername VARCHAR(20) NOT NULL, 
                 UNIQUE INDEX IDX_tblUser_strUsername (strUsername), 
+                UNIQUE INDEX IDX_tblUser_strApiKey (strApiKey),
                 PRIMARY KEY(intUserId)
             ) 
             DEFAULT CHARACTER SET utf8mb4 

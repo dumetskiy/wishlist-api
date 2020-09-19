@@ -11,5 +11,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class IsResourceOwner extends Constraint
 {
-    public $message = 'This action can only be performed by resource owner: {{ username }}';
+    public $message = 'This action can only be performed by resource owner';
 }

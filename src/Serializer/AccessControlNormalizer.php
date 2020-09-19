@@ -95,9 +95,4 @@ final class AccessControlNormalizer implements NormalizerInterface, Denormalizer
     {
         return $this->normalizer->supportsDenormalization($data, $type, $format);
     }
-
-    private function addContextGroup(array &$context): void
-    {
-
-    }
 }

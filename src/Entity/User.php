@@ -16,26 +16,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={ContextGroup::GUEST_READ}},
- *     denormalizationContext={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
- *     collectionOperations={
- *         "post"={
- *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
- *              "normalization_context"={"groups"={ContextGroup::GUEST_READ, ContextGroup::OWNER_READ}},
- *         },
- *     },
- *     itemOperations={
- *         "get"={
- *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE}},
- *              "normalization_context"={"groups"={ContextGroup::GUEST_READ}},
- *         },
- *     },
+ *     normalizationContext={"groups"={ContextGroup::SCOPE_USER_READ}},
+ *     denormalizationContext={"groups"={ContextGroup::SCOPE_USER_WRITE}},
+ *     collectionOperations={"post"},
+ *     itemOperations={"get"},
  * )
  *
  * @ORM\Entity()
  * @ORM\Table(name="tblUser")
  *
- * @UniqueEntity("username")
+ * @UniqueEntity({"username", "apiKey"})
  */
 class User implements UserInterface
 {
@@ -46,7 +36,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intUserId", type="integer")
      *
-     * @Groups({ContextGroup::GUEST_READ, ContextGroup::GUEST_WRITE})
+     * @Groups({ContextGroup::SCOPE_USER_READ})
      */
     private $id;
 
@@ -66,7 +56,12 @@ class User implements UserInterface
      *      allowEmptyString = false
      * )
      *
-     * @Groups({ContextGroup::OWNER_READ, ContextGroup::OWNER_WRITE})
+     * @Groups({
+     *     ContextGroup::OWNER_READ,
+     *     ContextGroup::OWNER_WRITE,
+     *     ContextGroup::SCOPE_USER_READ,
+     *     ContextGroup::SCOPE_USER_WRITE
+     * })
      */
     private $apiKey;
 
@@ -80,7 +75,12 @@ class User implements UserInterface
      *      allowEmptyString = false
      * )
      *
-     * @Groups({ContextGroup::GUEST_READ, ContextGroup::OWNER_WRITE})
+     * @Groups({
+     *     ContextGroup::OWNER_READ,
+     *     ContextGroup::OWNER_WRITE,
+     *     ContextGroup::SCOPE_USER_READ,
+     *     ContextGroup::SCOPE_USER_WRITE
+     * })
      */
     private $username;
 
@@ -89,7 +89,9 @@ class User implements UserInterface
      *
      * @ORM\OneToMany(targetEntity=Wishlist::class, mappedBy="user")
      *
-     * @Groups({ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_USER_READ
+     * })
      */
     private $wishlists;
 

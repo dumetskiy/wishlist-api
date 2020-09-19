@@ -63,6 +63,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
     /**
      * @param string|null $credentials
      * @param UserProviderInterface $userProvider
+     *
      * @return User|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?User

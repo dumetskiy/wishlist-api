@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ *     normalizationContext={"groups"={ContextGroup::SCOPE_PRODUCT_READ}},
+ *     denormalizationContext={"groups"={ContextGroup::SCOPE_PRODUCT_WRITE}},
  *     collectionOperations={"post", "get"},
  *     itemOperations={"get"},
  * )
@@ -28,8 +30,6 @@ class Product
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intProductId", type="integer")
-     *
-     * @Groups({ContextGroup::GUEST_READ})
      */
     private $id;
 
@@ -42,7 +42,12 @@ class Product
      *      maxMessage = "Product name cannot be longer than {{ limit }} characters"
      * )
      *
-     * @Groups({ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_PRODUCT_READ,
+     *     ContextGroup::SCOPE_PRODUCT_WRITE,
+     *     ContextGroup::SCOPE_WISHLIST_ITEM_READ,
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     * })
      */
     private $name;
 

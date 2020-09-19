@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\DTO\WishlistExportDTO;
 use App\Enum\ContextGroup;
 use App\Validator\Constraints\IsResourceOwner;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,19 +15,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={ContextGroup::GUEST_READ}},
- *     denormalizationContext={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
+ *     normalizationContext={"groups"={ContextGroup::SCOPE_WISHLIST_READ}},
+ *     denormalizationContext={"groups"={ContextGroup::SCOPE_WISHLIST_WRITE}},
  *     collectionOperations={
- *         "post"={
- *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE, ContextGroup::OWNER_WRITE}},
- *              "normalization_context"={"groups"={ContextGroup::GUEST_READ, ContextGroup::OWNER_READ}},
- *         },
+ *         "post",
+ *          "export"={
+ *              "method"="GET",
+ *              "path"="/wishlists/export",
+ *              "formats"={"csv"={"text/csv"}},
+ *              "pagination_enabled"=false,
+ *              "output"=WishlistExportDTO::class,
+ *              "normalization_context"={"groups"={ContextGroup::SCOPE_WISHLIST_EXPORT}},
+ *          },
  *     },
  *     itemOperations={
- *         "get"={
- *              "denormalization_context"={"groups"={ContextGroup::GUEST_WRITE}},
- *              "normalization_context"={"groups"={ContextGroup::GUEST_READ}},
- *         },
+ *         "get",
+ *         "delete",
  *     },
  * )
  *
@@ -41,7 +44,7 @@ class Wishlist
      * @ORM\GeneratedValue()
      * @ORM\Column(name="intWishlistId", type="integer")
      *
-     * @Groups({ContextGroup::GUEST_WRITE, ContextGroup::GUEST_READ})
+     * @Groups({ContextGroup::SCOPE_WISHLIST_READ, ContextGroup::SCOPE_USER_READ})
      */
     private $id;
 
@@ -51,31 +54,35 @@ class Wishlist
      * @Assert\NotNull()
      * @Assert\Length(
      *      max = 30,
-     *      maxMessage = "Wishlist name cannot be longer than {{ limit }} characters"
+     *      maxMessage = "Wishlist name cannot be longer than {{ limit }} characters",
      * )
      *
-     * @Groups({ContextGroup::GUEST_WRITE, ContextGroup::GUEST_READ})
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     *     ContextGroup::SCOPE_WISHLIST_WRITE,
+     *     ContextGroup::SCOPE_USER_READ,
+     * })
      */
     private $name;
 
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity=User::class, cascade={"all"})
+     * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist"})
      * @ORM\JoinColumn(name="intUserId", referencedColumnName="intUserId", onDelete="SET NULL")
      *
-     * @Groups({ContextGroup::GUEST_WRITE})
-     *
      * @IsResourceOwner()
+     *
+     * @Groups({ContextGroup::SCOPE_WISHLIST_WRITE})
      */
     private $user;
 
     /**
-     * @var ArrayCollection|WishlistItem[]
+     * @var PersistentCollection|WishlistItem[]
      *
-     * @ORM\OneToMany(targetEntity=WishlistItem::class, mappedBy="wishlist")
+     * @ORM\OneToMany(targetEntity=WishlistItem::class, mappedBy="wishlist", cascade="persist")
      *
-     * @Groups({ContextGroup::GUEST_READ})
+     * @Groups({ContextGroup::SCOPE_WISHLIST_READ})
      */
     private $wishlistItems;
 
@@ -85,6 +92,35 @@ class Wishlist
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     *
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     *     ContextGroup::SCOPE_USER_READ,
+     *     ContextGroup::SCOPE_WISHLIST_EXPORT,
+     * })
+     */
+    public function getItemsCount(): int
+    {
+        return $this->getWishlistItems()->count();
+    }
+
+    /**
+     * @return string|null
+     *
+     * @Groups({
+     *     ContextGroup::SCOPE_WISHLIST_READ,
+     *     ContextGroup::SCOPE_WISHLIST_EXPORT,
+     * })
+     */
+    public function getOwnerUsername(): ?string
+    {
+        return $this->getUser() instanceof User
+            ? $this->getUser()->getUsername()
+            : null;
     }
 
     /**
@@ -136,7 +172,7 @@ class Wishlist
     }
 
     /**
-     * @param WishlistItem[]|ArrayCollection $wishlistItems
+     * @param WishlistItem[]|PersistentCollection $wishlistItems
      *
      * @return $this
      */
