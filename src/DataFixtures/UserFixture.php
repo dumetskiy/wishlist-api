@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 class UserFixture extends Fixture
 {
     /**
-     * Creating two dummy users
+     * Creating dummy users.
      *
      * @param ObjectManager $manager
      */

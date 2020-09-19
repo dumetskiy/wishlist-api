@@ -42,7 +42,7 @@ class RequestEventHandler implements KernelEventHandlerInterface
     }
 
     /**
-     * This method allows to use "me" instead of user id to get authenticated user's details
+     * This method allows to use "me" instead of user id to get authenticated user's details.
      *
      * @param RequestEvent $event
      */

@@ -20,7 +20,7 @@ class OwnershipResolverFactory
     }
 
     /**
-     * @param Object $object
+     * @param object $object
      *
      * @return OwnershipResolverInterface|null
      */

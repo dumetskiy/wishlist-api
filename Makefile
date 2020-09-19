@@ -1,4 +1,5 @@
 CMD_DOCKER_COMPOSE := docker-compose
+CMD_CS_FIXER_FIX := php vendor/bin/php-cs-fixer fix  --config=.php_cs
 
 build:
 	@echo Building project...w
@@ -34,3 +35,6 @@ exec:
 	@echo Executing command...
 	${CMD_DOCKER_COMPOSE} exec $(command)
 	@echo Command executed.
+
+php-cs-fixer:
+	${CMD_CS_FIXER_FIX} src --dry-run --verbose --diff;

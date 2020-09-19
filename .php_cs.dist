@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'class_definition' => false,
+        'concat_space' => ['spacing' => 'one'],
+        'native_function_invocation' => false,
+        'phpdoc_annotation_without_dot' => false,
+        'phpdoc_types_order' => [
+            'null_adjustment' => 'none',
+            'sort_algorithm' => 'none',
+        ],
+        'no_superfluous_phpdoc_tags' => false,
+        'phpdoc_align' => false,
+        'blank_line_before_statement' => [
+            'statements' => [
+                'break',
+                'continue',
+                'declare',
+                'do',
+                'for',
+                'foreach',
+                'if',
+                'include',
+                'include_once',
+                'require',
+                'require_once',
+                'return',
+                'switch',
+                'throw',
+                'try',
+                'while',
+                'yield',
+            ],
+        ],
+    ])
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->exclude(['bin', 'var', 'vendor'])
+            ->notName('check.php')
+            ->notName('SymfonyRequirements.php')
+            ->in(__DIR__)
+    );

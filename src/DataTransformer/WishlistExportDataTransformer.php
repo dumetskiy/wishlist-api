@@ -34,6 +34,6 @@ class WishlistExportDataTransformer implements DataTransformerInterface
      */
     public function supportsTransformation($data, string $to, array $context = []): bool
     {
-        return $data instanceof Wishlist && $to === WishlistExportDTO::class;
+        return $data instanceof Wishlist && WishlistExportDTO::class === $to;
     }
 }

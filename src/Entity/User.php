@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -43,7 +43,7 @@ class User implements UserInterface
     /**
      * This is an API key used to authenticate the user
      * By default fixture-generated users API keys are generated using uuid_create().
-     * The serialization context is not set so this field will not be serialized
+     * The serialization context is not set so this field will not be serialized.
      *
      * @var string
      *
@@ -161,7 +161,7 @@ class User implements UserInterface
 
     /**
      * As all users will have same privileges there's no need in actual
-     * entity field / db column
+     * entity field / db column.
      *
      * @see UserInterface
      */

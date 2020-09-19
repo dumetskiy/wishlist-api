@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class EventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var KernelEventHandlerFactory $eventHandlerFactory
+     * @var KernelEventHandlerFactory
      */
     public $eventHandlerFactory;
 

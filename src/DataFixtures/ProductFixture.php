@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 class ProductFixture extends Fixture
 {
     /**
-     * Creating dummy products
+     * Creating dummy products.
      *
      * @param ObjectManager $manager
      */
