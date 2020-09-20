@@ -20,3 +20,5 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
             - '../src/Serializer'
+    App\Serializer\AccessControlNormalizer:
+        arguments: [ '@api_platform.serializer.normalizer.item' ]

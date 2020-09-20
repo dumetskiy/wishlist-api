@@ -7,6 +7,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\DTO\WishlistExportDTO;
 use App\Enum\ContextGroup;
+use App\Repository\WishlistRepository;
 use App\Validator\Constraints\IsResourceOwner;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -22,7 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "export"={
  *              "method"="GET",
  *              "path"="/wishlists/export",
- *              "formats"={"csv"={"text/csv"}},
  *              "pagination_enabled"=false,
  *              "output"=WishlistExportDTO::class,
  *              "normalization_context"={"groups"={ContextGroup::SCOPE_WISHLIST_EXPORT}},
@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  * )
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=WishlistRepository::class)
  * @ORM\Table(name="tblWishlist")
  */
 class Wishlist
@@ -68,7 +68,7 @@ class Wishlist
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist"}, inversedBy="wishlists")
      * @ORM\JoinColumn(name="intUserId", referencedColumnName="intUserId", onDelete="SET NULL")
      *
      * @IsResourceOwner()

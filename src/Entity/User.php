@@ -59,8 +59,7 @@ class User implements UserInterface
      * @Groups({
      *     ContextGroup::OWNER_READ,
      *     ContextGroup::OWNER_WRITE,
-     *     ContextGroup::SCOPE_USER_READ,
-     *     ContextGroup::SCOPE_USER_WRITE
+     *     ContextGroup::SCOPE_USER_WRITE,
      * })
      */
     private $apiKey;
@@ -76,10 +75,9 @@ class User implements UserInterface
      * )
      *
      * @Groups({
-     *     ContextGroup::OWNER_READ,
      *     ContextGroup::OWNER_WRITE,
      *     ContextGroup::SCOPE_USER_READ,
-     *     ContextGroup::SCOPE_USER_WRITE
+     *     ContextGroup::SCOPE_USER_WRITE,
      * })
      */
     private $username;

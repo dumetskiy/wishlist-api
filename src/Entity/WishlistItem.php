@@ -54,7 +54,7 @@ class WishlistItem
     /**
      * @var Wishlist
      *
-     * @ORM\ManyToOne(targetEntity=Wishlist::class, cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Wishlist::class, cascade={"persist"}, inversedBy="wishlistItems")
      * @ORM\JoinColumn(name="intWishlistId", referencedColumnName="intWishlistId", onDelete="SET NULL")
      *
      * @Groups({

@@ -12,3 +12,19 @@ api_platform:
             header_key_auth:
                 name: '%api_key_query_param_name%'
                 type: 'header'
+    formats:
+        jsonld:
+            mime_types:
+                - application/ld+json
+        json:
+            mime_types:
+                - application/json
+        html:
+            mime_types:
+                - text/html
+        jsonhal:
+            mime_types:
+                - application/hal+json
+        csv:
+            mime_types:
+                - text/csv
