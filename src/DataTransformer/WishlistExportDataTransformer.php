@@ -7,6 +7,7 @@ namespace App\DataTransformer;
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use App\DTO\WishlistExportDTO;
 use App\Entity\Wishlist;
+use App\Exception\InvalidArgumentTypeException;
 
 class WishlistExportDataTransformer implements DataTransformerInterface
 {
@@ -19,6 +20,14 @@ class WishlistExportDataTransformer implements DataTransformerInterface
      */
     public function transform($object, string $to, array $context = []): WishlistExportDTO
     {
+        if (!$object instanceof Wishlist) {
+            throw InvalidArgumentTypeException::create(
+                '$object',
+                Wishlist::class,
+                is_object($object) ? get_class($object) : gettype($object)
+            );
+        }
+
         return (new WishlistExportDTO())
             ->setItemsCount($object->getItemsCount())
             ->setOwnerUsername($object->getOwnerUsername())

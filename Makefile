@@ -38,3 +38,6 @@ exec:
 
 php-cs-fixer:
 	${CMD_CS_FIXER_FIX} src --dry-run --verbose --diff;
+
+unit-test:
+	${CMD_DOCKER_COMPOSE} exec php vendor/bin/phpunit;
