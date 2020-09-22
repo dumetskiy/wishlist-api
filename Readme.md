@@ -48,10 +48,15 @@ It is a bit tricky to find a service to cover with unit tests because most of th
 
 # Setup
 In order to start the project execute the following commands:
+> touch .env.local
 > make start
 > make composer command="install"
 > make console command="doctrine:database:create"
 > make console command="doctrine:migrations:migrate"
+
+Or just run
+
+> ./setup_environment.sh
 
 If you would like to apply fixtures adding a couple of products and users you can run the following command:
 > make console command="doctrine:fixtures:load"

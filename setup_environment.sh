@@ -1,3 +1,4 @@
+touch .env.local
 make start
 make composer command="install"
 make console command="doctrine:database:create"
