@@ -1,11 +1,6 @@
 CMD_DOCKER_COMPOSE := docker-compose
 CMD_CS_FIXER_FIX := php vendor/bin/php-cs-fixer fix  --config=.php_cs
 
-build:
-	@echo Building project...w
-	${CMD_DOCKER_COMPOSE} build -d
-	@echo Project has been built.
-
 start:
 	@echo Starting project...
 	${CMD_DOCKER_COMPOSE} up -d
