@@ -47,6 +47,8 @@ class OwnershipValidator
 
         $objectOwner = $ownershipResolver->getOwner($object);
 
-        return $objectOwner instanceof User && $objectOwner->getId() === $this->security->getUser()->getId();
+        return $objectOwner instanceof User
+            && $this->security->getUser() instanceof User
+            && $objectOwner->getId() === $this->security->getUser()->getId();
     }
 }

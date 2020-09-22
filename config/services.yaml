@@ -4,14 +4,14 @@ imports:
     - { resource: services/serializer.yaml }
 
 parameters:
-    api_key_query_param_name: key
+    api_key_header_param_name: X-KEY
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         bind:
-            $apiKeyQueryParamName: '%api_key_query_param_name%'
+            $apiKeyQueryParamName: '%api_key_header_param_name%'
     App\:
         resource: '../src/'
         exclude:

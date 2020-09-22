@@ -10,7 +10,7 @@ api_platform:
         versions: [3]
         api_keys:
             header_key_auth:
-                name: '%api_key_query_param_name%'
+                name: '%api_key_header_param_name%'
                 type: 'header'
     formats:
         jsonld:
