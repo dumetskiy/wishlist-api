@@ -33,7 +33,7 @@ abstract class AbstractReportDataFetcher
     /**
      * @return int
      */
-    protected abstract function getDefaultBatchSize(): int;
+    abstract protected function getDefaultBatchSize(): int;
 
     /**
      * @param int $batchSize
@@ -41,12 +41,12 @@ abstract class AbstractReportDataFetcher
      *
      * @return array
      */
-    protected abstract function fetchBatchData(int $batchSize, int $lastItemId = null): array;
+    abstract protected function fetchBatchData(int $batchSize, int $lastItemId = null): array;
 
     /**
      * @param array $itemData
      *
      * @return int
      */
-    protected abstract function getItemIdentifier(array $itemData): int;
+    abstract protected function getItemIdentifier(array $itemData): int;
 }

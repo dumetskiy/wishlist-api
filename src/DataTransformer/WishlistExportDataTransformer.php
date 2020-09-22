@@ -21,11 +21,7 @@ class WishlistExportDataTransformer implements DataTransformerInterface
     public function transform($object, string $to, array $context = []): WishlistExportDTO
     {
         if (!$object instanceof Wishlist) {
-            throw InvalidArgumentTypeException::create(
-                '$object',
-                Wishlist::class,
-                is_object($object) ? get_class($object) : gettype($object)
-            );
+            throw InvalidArgumentTypeException::create('$object', Wishlist::class, is_object($object) ? get_class($object) : gettype($object));
         }
 
         return (new WishlistExportDTO())
